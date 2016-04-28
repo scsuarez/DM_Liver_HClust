@@ -1,6 +1,5 @@
 # DrugMatrix-Hierarchical cluster/Dyntreecut processing script (DoD BHSAI)
 # Modified by SCS
-# Run in bash shell, apparently WGNCA package is incompatible with running in RStudio
 
 library(annotate)
 library(affy)
@@ -9,17 +8,19 @@ library("rat2302.db")
 library("dynamicTreeCut")
 library("moduleColor")
 library(cluster)
-library(WGCNA)
 
 ###########
 #HC-Pearson
 ###########
 # load table
-FC9K<-as.matrix(read.delim("liver_fc_final_filtered.txt", row.names=1, header=TRUE, sep="\t"))
+FC9K<-as.matrix(read.delim("liver_fc_pc25_nsFilter_rma_qc.txt", row.names=1, header=TRUE, sep="\t"))
 # transpose table. Since "cor" function operates on columns
 tFC9K<-t(FC9K)
 # calculate correlation matrix
-CORFC9K_P <- cor(tFC9K, y=NULL, use= "pairwise.complete.obs", method = "pearson")
+# changed complete.pairwise.obs to everything
+# had to use complete.pairwise.obs due to presence of one column of NaN
+## unknown at the time of initial code running, now fixed in DM_liver_preprocess
+CORFC9K_P <- cor(tFC9K, y=NULL, use= "everything", method = "pearson")
 # CORFC9K_P<-cor(tFC9K, method="pearson")
 # convert correlation into distance using "1-cor" and then get the distance matrix
 DISTFC9K_P<-as.dist(1-CORFC9K_P)
