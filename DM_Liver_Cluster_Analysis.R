@@ -2,7 +2,7 @@
 # should be run after DM_Liver_HC_SCS.R
 
 # read in files if not already in environment
-# either need liver_fc_pc25_nsFilter_rma_qc.txt
+# either need liver_fc_pc2_nsFilterNV.txt
 ## original log matrix out
 # or FC9KDHCUT_PA2out.txt
 ## log matrix text file with cluster information added

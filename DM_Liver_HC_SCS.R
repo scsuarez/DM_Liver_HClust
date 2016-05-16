@@ -13,7 +13,7 @@ library(cluster)
 #HC-Pearson
 ###########
 # load table
-FC9K<-as.matrix(read.delim("liver_fc_pc25_nsFilter_rma_qc.txt", row.names=1, header=TRUE, sep="\t"))
+FC9K<-as.matrix(read.delim("liver_fc_pc2_nsFilterNV.txt", row.names=1, header=TRUE, sep="\t"))
 # transpose table. Since "cor" function operates on columns
 tFC9K<-t(FC9K)
 # calculate correlation matrix
@@ -40,26 +40,27 @@ write.table(FC9KDHCUT_PA2,file="FC9KDHCUT_PA2out.txt",sep="\t",row.names=TRUE)
 #************************
 ###############################
 
-#initial Cluster analysis for SOT
-Clusters <- FC9KDHCUT_PA2[ ,647]
-names(Clusters) <- rownames(FC9KDHCUT_PA2)
-ClusterSort <- sort(Clusters)
+# initial Cluster analysis for SOT
+# not in use now
+# Clusters <- FC9KDHCUT_PA2[ ,647]
+# names(Clusters) <- rownames(FC9KDHCUT_PA2)
+# ClusterSort <- sort(Clusters)
 
 #convert Cluster Probe IDs to gene information
-PROBES<- as.character(names(ClusterSort))
+# PROBES<- as.character(names(ClusterSort))
 # Use select and chip.db to extract ids (instead of get/mget).Note: one to many mapping occurs
-AOUT <- select(rat2302.db, PROBES, c("SYMBOL","ENTREZID", "GENENAME"))
-DUP_AOUT <- AOUT[duplicated(AOUT$PROBEID)|duplicated(AOUT$PROBEID,fromLast=TRUE),]
-DUP_AOUT_PROBE <- DUP_AOUT$PROBEID
-AOUT_UNIQ <- AOUT[!(AOUT$PROBEID %in% DUP_AOUT_PROBE),]
+# AOUT <- select(rat2302.db, PROBES, c("SYMBOL","ENTREZID", "GENENAME"))
+# DUP_AOUT <- AOUT[duplicated(AOUT$PROBEID)|duplicated(AOUT$PROBEID,fromLast=TRUE),]
+# DUP_AOUT_PROBE <- DUP_AOUT$PROBEID
+# AOUT_UNIQ <- AOUT[!(AOUT$PROBEID %in% DUP_AOUT_PROBE),]
 # in duplicated, remove LOC probes + duplicate copy of probes
 # Note: LOC probes are probes that map to gene symb starting with LOC... (duplicate).Same probe also map to another gene symb
-DUP_AOUT1<-DUP_AOUT[!grepl("LOC",DUP_AOUT$SYMBOL)&!duplicated(DUP_AOUT$PROBEID),]
-#rbind DUP_AOUT1 to AOUT_UNIQ
-PROB_RID_OUT <- rbind(AOUT_UNIQ,DUP_AOUT1)
+# DUP_AOUT1<-DUP_AOUT[!grepl("LOC",DUP_AOUT$SYMBOL)&!duplicated(DUP_AOUT$PROBEID),]
+# rbind DUP_AOUT1 to AOUT_UNIQ
+# PROB_RID_OUT <- rbind(AOUT_UNIQ,DUP_AOUT1)
 # bind our cluster info to gene information
-ClusterGeneSort <- cbind(PROB_RID_OUT, ClusterSort)
-write.table(ClusterGeneSort,file="ClusterGeneSort.txt",sep="\t",row.names=FALSE)
+# ClusterGeneSort <- cbind(PROB_RID_OUT, ClusterSort)
+# write.table(ClusterGeneSort,file="ClusterGeneSort.txt",sep="\t",row.names=FALSE)
 
 
 
