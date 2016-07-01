@@ -6,8 +6,6 @@ library(affy)
 library("Biobase")
 library("rat2302.db")
 library("dynamicTreeCut")
-library("moduleColor")
-library(cluster)
 
 ###########
 #HC-Pearson
